@@ -5,3 +5,9 @@ edition = "2024"
 
 [lib]
 doctest = false
+
+[dependencies]
+rpc-router = {workspace = true}
+derive_more = {workspace = true}
+serde = {workspace = true}
+serde_json = {workspace = true}
