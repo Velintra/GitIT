@@ -2465,6 +2465,7 @@ version = "0.1.0"
 name = "lib-git"
 version = "0.1.0"
 dependencies = [
+ "derive_more 2.0.1",
  "git2",
  "serde",
  "serde_json",
