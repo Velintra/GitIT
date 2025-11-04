@@ -47,7 +47,7 @@ GitIT follows a modular architecture with separate crates:
 
 - [Changelog](CHANGELOG.md) - Version history and changes
 - [Security](SECURITY.md) - Security policies and vulnerability reporting
-- [Development](DEVELOPMENT.md) - Detailed development setup and architecture
+- [Documentation](docs/DOCUMENTATION.md) - Security policies and vulnerability reporting
 
 ## Issue Reporting
 
