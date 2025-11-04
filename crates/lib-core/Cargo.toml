@@ -5,3 +5,8 @@ edition = "2024"
 
 [lib]
 doctest = false
+
+[dependencies]
+tauri = { version = "2", features = [] }
+derive_more = {workspace = true}
+serde = {workspace=true}
