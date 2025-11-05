@@ -2462,6 +2462,7 @@ name = "lib-core"
 version = "0.1.0"
 dependencies = [
  "derive_more 2.0.1",
+ "rpc-router",
  "serde",
  "tauri",
 ]

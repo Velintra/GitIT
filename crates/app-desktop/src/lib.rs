@@ -2,6 +2,7 @@
 //
 //
 mod error;
+mod ipc;
 
 pub use error::{Error, Result};
 

@@ -10,3 +10,4 @@ doctest = false
 tauri = { version = "2", features = [] }
 derive_more = {workspace = true}
 serde = {workspace=true}
+rpc-router = {workspace = true}
