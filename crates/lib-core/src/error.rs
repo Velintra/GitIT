@@ -8,6 +8,9 @@ pub enum Error {
 	#[from(String, &String, &str)]
 	Custom(String),
 	MutexPoison,
+	NoRepoOpened,
+	#[from]
+	LibGit(lib_git::Error),
 	// -- Externals
 	#[from]
 	Io(std::io::Error), // as example

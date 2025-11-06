@@ -1,4 +1,5 @@
 use crate::{Error, Result};
+use lib_core::Ctx;
 use lib_rpc::IpcResponse;
 use rpc_router::resources_builder;
 use serde_json::Value;
@@ -16,7 +17,10 @@ pub async fn rpc_handler(
 			return Err(Error::RpcRequestParsing(rpc_req_error));
 		}
 	};
-	let additional_resources = resources_builder![app_handle].build();
+
+	let ctx = Ctx::from_app(app_handle)?;
+
+	let additional_resources = resources_builder![ctx].build();
 
 	let rpc_call_res = rpc_router.call_with_resources(rpc_req, additional_resources).await;
 

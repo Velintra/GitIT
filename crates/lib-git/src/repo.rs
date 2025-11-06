@@ -2,23 +2,31 @@ use crate::{
 	Commit,
 	error::{Error, Result},
 };
-use git2::{Oid, Repository, Revwalk, Sort};
-use std::path::Path;
+use git2::{Oid, Repository, Sort};
+use std::{path::Path, sync::Arc};
 
 pub struct Repo {
-	inner: Repository,
+	inner: Arc<Repository>,
+}
+
+impl Clone for Repo {
+	fn clone(&self) -> Self {
+		Self {
+			inner: Arc::clone(&self.inner),
+		}
+	}
 }
 
 impl Repo {
 	pub fn open(path: impl AsRef<Path>) -> Result<Repo> {
 		Ok(Self {
-			inner: Repository::discover(path)?,
+			inner: Arc::new(Repository::discover(path)?),
 		})
 	}
 
 	pub fn init(path: impl AsRef<Path>) -> Result<Self> {
 		Ok(Self {
-			inner: Repository::init(path)?,
+			inner: Arc::new(Repository::init(path)?),
 		})
 	}
 
@@ -34,8 +42,8 @@ impl Repo {
 		Ok(names)
 	}
 
-	pub fn root(&self) -> Result<String> {
-		Ok(self.inner.path().display().to_string())
+	pub fn root(&self) -> String {
+		self.inner.path().display().to_string()
 	}
 
 	pub fn status(&self) -> Result<Vec<String>> {

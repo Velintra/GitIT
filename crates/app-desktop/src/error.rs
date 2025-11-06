@@ -1,4 +1,5 @@
 use derive_more::{Display, From};
+use serde::Serialize;
 use serde_json::Value;
 
 pub type Result<T> = core::result::Result<T, Error>;
@@ -10,9 +11,10 @@ pub enum Error {
 	Custom(String),
 	CtxFail,
 	JsonSerde(serde_json::Error),
-	ValueExt(value_ext::JsonValueExtError),
 	IO(tokio::io::Error),
 	TauriError(tauri::Error),
+	#[from]
+	LibCore(lib_core::Error),
 	#[from]
 	RpcRequestParsing(rpc_router::RpcRequestParsingError),
 	#[from]

@@ -1,4 +1,4 @@
-use rpc_router::IntoParams;
+use rpc_router::{IntoParams, RpcParams};
 use serde::Deserialize;
 use serde::de::DeserializeOwned;
 
@@ -12,6 +12,11 @@ impl<D> IntoParams for ParamsForCreate<D> where D: DeserializeOwned + Send {}
 #[derive(Deserialize)]
 pub struct ParamsOided {
 	pub oid: String,
+}
+
+#[derive(Deserialize, RpcParams)]
+pub struct ParamsForOpen {
+	pub path: String,
 }
 
 #[derive(Deserialize)]
