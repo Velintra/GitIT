@@ -4,6 +4,9 @@
 mod error;
 mod handlers;
 mod ipc;
+use std::sync::Arc;
+
+use lib_core::RepoManager;
 
 pub use error::{Error, Result};
 
