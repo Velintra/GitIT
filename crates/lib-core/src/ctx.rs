@@ -1,8 +1,10 @@
 use crate::{HubEvent, error::Result};
+use rpc_router::RpcResource;
 use serde::Serialize;
 use std::sync::Arc;
 use tauri::{AppHandle, Emitter, Wry};
 
+#[derive(Clone, RpcResource)]
 pub struct Ctx {
 	app_handle: AppHandle<Wry>,
 	// TODO: Figure out where to put Repo

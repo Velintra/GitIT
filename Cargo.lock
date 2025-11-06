@@ -99,6 +99,8 @@ name = "app-desktop"
 version = "0.1.0"
 dependencies = [
  "derive_more 2.0.1",
+ "lib-rpc",
+ "rpc-router",
  "serde",
  "serde_json",
  "tauri",
@@ -2462,6 +2464,7 @@ name = "lib-core"
 version = "0.1.0"
 dependencies = [
  "derive_more 2.0.1",
+ "rpc-router",
  "serde",
  "tauri",
 ]

@@ -8,6 +8,7 @@ pub enum Error {
 	#[from(String, &String, &str)]
 	Custom(String),
 	// -- Externals
+	InvalidBranchTarget,
 	#[from]
 	Git2(git2::Error),
 }
