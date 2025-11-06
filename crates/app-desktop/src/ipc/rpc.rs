@@ -2,7 +2,7 @@ use crate::{Error, Result};
 use lib_rpc::IpcResponse;
 use rpc_router::resources_builder;
 use serde_json::Value;
-use tauri::{AppHandle, State, Wry};
+use tauri::{AppHandle, Manager, State, Wry};
 
 #[tauri::command]
 pub async fn rpc_handler(
