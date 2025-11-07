@@ -21,3 +21,4 @@ ts-rs = { version = "6" }
 serde_with = { version = "3", features = ["time_0_3"] }
 rpc-router = "=0.2.0-alpha.1"
 derive_more = { version = "2", features = ["from", "display"] }
+gix = { version="0.74.1", features = ["async-network-client","parallel","max-performance", "serde", "credentials", "index", "revision"] }

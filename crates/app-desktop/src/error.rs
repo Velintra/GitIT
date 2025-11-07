@@ -1,5 +1,4 @@
 use derive_more::{Display, From};
-use serde::Serialize;
 use serde_json::Value;
 
 pub type Result<T> = core::result::Result<T, Error>;

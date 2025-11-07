@@ -10,6 +10,29 @@ pub enum Error {
 	// -- Externals
 	InvalidBranchTarget,
 	#[from]
+	GixDiscover(gix::discover::Error),
+	#[from]
+	GixInit(gix::init::Error),
+	#[from]
+	GixFind(gix::object::find::existing::Error),
+	#[from]
+	GixTryInto(gix::object::try_into::Error),
+	#[from]
+	GixCommit(gix::object::commit::Error),
+	#[from]
+	GixReference(gix::reference::head_commit::Error),
+	#[from]
+	GixStatus(gix::status::Error),
+
+	#[from]
+	GixRef(gix::reference::iter::init::Error),
+	#[from]
+	GixRefOpen(gix::refs::packed::buffer::open::Error),
+	#[from]
+	GixStatusIntoIter(gix::status::into_iter::Error),
+	#[from]
+	GixStatusIter(gix::status::iter::Error),
+	#[from]
 	Git2(git2::Error),
 }
 

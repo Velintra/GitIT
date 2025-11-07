@@ -1,8 +1,8 @@
-use git2::Oid;
+use gix::ObjectId;
 
 #[derive(Debug, Clone)]
 pub struct Branch {
 	pub name: String,
 	pub kind: String, // "Local" | "Remote"
-	pub target: Option<Oid>,
+	pub target: ObjectId,
 }

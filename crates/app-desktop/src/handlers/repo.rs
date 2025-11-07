@@ -10,7 +10,3 @@ pub fn open_repo(rm: RepoManager, ctx: Arc<Ctx>, params: ParamsForOpen) -> Resul
 	rm.set_repo(repo)?;
 	Ok(root.into())
 }
-
-// pub fn rpc_router_builder() -> RouterBuilder {
-// 	RouterBuilder::default().append_dyn("open_repo", Box::new(open_repo))
-// }
