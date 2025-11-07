@@ -12,6 +12,7 @@ pub enum Error {
 	Custom(String),
 	// -- Externals
 	InvalidBranchTarget,
+	GixObjectParseFail(String),
 	#[from]
 	GixDiscover(#[serde_as(as = "DisplayFromStr")] gix::discover::Error),
 	#[from]
@@ -26,7 +27,6 @@ pub enum Error {
 	GixReference(#[serde_as(as = "DisplayFromStr")] gix::reference::head_commit::Error),
 	#[from]
 	GixStatus(#[serde_as(as = "DisplayFromStr")] gix::status::Error),
-
 	#[from]
 	GixRef(#[serde_as(as = "DisplayFromStr")] gix::reference::iter::init::Error),
 	#[from]
@@ -36,7 +36,16 @@ pub enum Error {
 	#[from]
 	GixStatusIter(#[serde_as(as = "DisplayFromStr")] gix::status::iter::Error),
 	#[from]
-	Git2(#[serde_as(as = "DisplayFromStr")] git2::Error),
+	GixRevisionWalk(#[serde_as(as = "DisplayFromStr")] gix::revision::walk::Error),
+	#[from]
+	GixRevisionWalkIter(#[serde_as(as = "DisplayFromStr")] gix::revision::walk::iter::Error),
+	#[from]
+	GixFindExisting(#[serde_as(as = "DisplayFromStr")] gix::object::find::existing::with_conversion::Error), // #[from]
+	                                                                                                         // Git2(#[serde_as(as = "DisplayFromStr")] git2::Error),
+}
+
+pub(crate) fn parse_fail<E: std::fmt::Display>(err: E) -> Error {
+	Error::GixObjectParseFail(err.to_string())
 }
 
 // region:    --- Custom

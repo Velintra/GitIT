@@ -1,5 +1,4 @@
 use derive_more::{Display, From};
-use rpc_router::RpcHandlerError;
 use serde::Serialize;
 
 use crate::IpcError;

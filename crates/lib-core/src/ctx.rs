@@ -11,8 +11,11 @@ pub struct Ctx {
 }
 
 impl Ctx {
-	pub fn from_app(app: AppHandle<Wry>) -> Result<Arc<Ctx>> {
+	pub fn arc_from_app(app: AppHandle<Wry>) -> Result<Arc<Ctx>> {
 		Ok(Arc::new(Ctx::new(app)))
+	}
+	pub fn from_app(app: AppHandle<Wry>) -> Result<Ctx> {
+		Ok(Ctx::new(app))
 	}
 }
 

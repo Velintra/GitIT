@@ -7,7 +7,7 @@ pub fn router_builder() -> RouterBuilder {
 	router_builder!(open_repo)
 }
 
-pub async fn open_repo(ctx: Ctx, rm: RepoManager, params: ParamsForOpen) -> Result<DataIpcResult<String>> {
+pub async fn open_repo(rm: RepoManager, ctx: Ctx, params: ParamsForOpen) -> Result<DataIpcResult<String>> {
 	let ParamsForOpen { path } = params;
 
 	let repo = RepoBmc::open_repo(ctx.into(), path)?;
