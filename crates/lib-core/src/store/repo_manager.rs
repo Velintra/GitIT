@@ -5,7 +5,7 @@ use rpc_router::RpcResource;
 
 use crate::error::{Error, Result};
 
-#[derive(Default, RpcResource)]
+#[derive(Default, Clone, RpcResource)]
 pub struct RepoManager {
 	repo: Arc<Mutex<Option<Repo>>>,
 }

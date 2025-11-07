@@ -1,8 +1,11 @@
 use derive_more::{Display, From};
+use serde::Serialize;
+use serde_with::{DisplayFromStr, serde_as};
 
 pub type Result<T> = core::result::Result<T, Error>;
 
-#[derive(Debug, Display, From)]
+#[serde_as]
+#[derive(Debug, Serialize, Display, From)]
 #[display("{self:?}")]
 pub enum Error {
 	#[from(String, &String, &str)]
@@ -10,30 +13,30 @@ pub enum Error {
 	// -- Externals
 	InvalidBranchTarget,
 	#[from]
-	GixDiscover(gix::discover::Error),
+	GixDiscover(#[serde_as(as = "DisplayFromStr")] gix::discover::Error),
 	#[from]
-	GixInit(gix::init::Error),
+	GixInit(#[serde_as(as = "DisplayFromStr")] gix::init::Error),
 	#[from]
-	GixFind(gix::object::find::existing::Error),
+	GixFind(#[serde_as(as = "DisplayFromStr")] gix::object::find::existing::Error),
 	#[from]
-	GixTryInto(gix::object::try_into::Error),
+	GixTryInto(#[serde_as(as = "DisplayFromStr")] gix::object::try_into::Error),
 	#[from]
-	GixCommit(gix::object::commit::Error),
+	GixCommit(#[serde_as(as = "DisplayFromStr")] gix::object::commit::Error),
 	#[from]
-	GixReference(gix::reference::head_commit::Error),
+	GixReference(#[serde_as(as = "DisplayFromStr")] gix::reference::head_commit::Error),
 	#[from]
-	GixStatus(gix::status::Error),
+	GixStatus(#[serde_as(as = "DisplayFromStr")] gix::status::Error),
 
 	#[from]
-	GixRef(gix::reference::iter::init::Error),
+	GixRef(#[serde_as(as = "DisplayFromStr")] gix::reference::iter::init::Error),
 	#[from]
-	GixRefOpen(gix::refs::packed::buffer::open::Error),
+	GixRefOpen(#[serde_as(as = "DisplayFromStr")] gix::refs::packed::buffer::open::Error),
 	#[from]
-	GixStatusIntoIter(gix::status::into_iter::Error),
+	GixStatusIntoIter(#[serde_as(as = "DisplayFromStr")] gix::status::into_iter::Error),
 	#[from]
-	GixStatusIter(gix::status::iter::Error),
+	GixStatusIter(#[serde_as(as = "DisplayFromStr")] gix::status::iter::Error),
 	#[from]
-	Git2(git2::Error),
+	Git2(#[serde_as(as = "DisplayFromStr")] git2::Error),
 }
 
 // region:    --- Custom

@@ -1,8 +1,10 @@
 use derive_more::{Display, From};
-
+use serde::Serialize;
+use serde_with::serde_as;
 pub type Result<T> = core::result::Result<T, Error>;
 
-#[derive(Debug, Display, From)]
+#[serde_as]
+#[derive(Debug, Serialize, Display, From)]
 #[display("{self:?}")]
 pub enum Error {
 	#[from(String, &String, &str)]
@@ -12,8 +14,6 @@ pub enum Error {
 	#[from]
 	LibGit(lib_git::Error),
 	// -- Externals
-	#[from]
-	Io(std::io::Error), // as example
 }
 
 impl<T> From<std::sync::PoisonError<T>> for Error {

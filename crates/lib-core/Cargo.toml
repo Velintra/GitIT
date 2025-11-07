@@ -8,7 +8,9 @@ doctest = false
 
 [dependencies]
 lib-git = {path = "../lib-git"}
+
 tauri = { version = "2", features = [] }
 derive_more = {workspace = true}
 serde = {workspace=true}
 rpc-router = {workspace = true}
+serde_with = {workspace=true }

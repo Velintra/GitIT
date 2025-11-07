@@ -1,17 +1,20 @@
 use derive_more::{Display, From};
+use rpc_router::RpcHandlerError;
+use serde::Serialize;
 use serde_json::Value;
+use serde_with::{serde_as, DisplayFromStr};
 
 pub type Result<T> = core::result::Result<T, Error>;
 
-#[derive(Debug, Display, From)]
+#[serde_as]
+#[derive(Debug, Serialize, RpcHandlerError, Display, From)]
 #[display("{self:?}")]
 pub enum Error {
 	#[from(String, &String, &str)]
 	Custom(String),
 	CtxFail,
-	JsonSerde(serde_json::Error),
-	IO(tokio::io::Error),
-	TauriError(tauri::Error),
+	JsonSerde(#[serde_as(as = "DisplayFromStr")] serde_json::Error),
+	TauriError(#[serde_as(as = "DisplayFromStr")] tauri::Error),
 	#[from]
 	LibCore(lib_core::Error),
 	#[from]

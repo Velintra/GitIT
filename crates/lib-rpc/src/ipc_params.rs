@@ -14,10 +14,12 @@ pub struct ParamsOided {
 	pub oid: String,
 }
 
-#[derive(Deserialize, RpcParams)]
+#[derive(Deserialize)]
 pub struct ParamsForOpen {
 	pub path: String,
 }
+
+impl IntoParams for ParamsForOpen {}
 
 #[derive(Deserialize)]
 pub struct ParamsIded {
