@@ -1,8 +1,9 @@
-use git2::Oid;
+use gix::ObjectId;
 
+#[derive(Debug, Clone)]
 pub struct Commit {
-	pub id: Oid,
-	pub tree: Oid,
+	pub id: ObjectId,
+	pub tree: ObjectId,
 	pub message: String,
 	pub author: String,
 	pub time: i64,

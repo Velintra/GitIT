@@ -4,6 +4,9 @@
 mod error;
 mod handlers;
 mod ipc;
+use std::sync::Arc;
+
+use lib_core::RepoManager;
 
 pub use error::{Error, Result};
 
@@ -14,9 +17,13 @@ fn greet(name: &str) -> String {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub async fn run() -> Result<()> {
+	let rm = RepoManager::default();
+	let rm = Arc::new(rm);
+
 	tauri::Builder::default()
 		.plugin(tauri_plugin_stronghold::Builder::new(|pass| todo!()).build())
 		.plugin(tauri_plugin_opener::init())
+		.manage(rm)
 		.invoke_handler(tauri::generate_handler![greet])
 		.run(tauri::generate_context!())
 		.expect("error while running tauri application");

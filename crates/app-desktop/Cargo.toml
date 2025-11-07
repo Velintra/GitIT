@@ -19,8 +19,13 @@ tauri-build = { version = "2", features = [] }
 
 [dependencies]
 lib-rpc = {path = "../lib-rpc"}
+lib-core = {path = "../lib-core"}
+lib-git = {path = "../lib-git"}
+
 tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
+serde_with = {workspace=true }
+
 serde = {workspace = true}
 serde_json = {workspace = true}
 tauri-plugin-stronghold = "2"
