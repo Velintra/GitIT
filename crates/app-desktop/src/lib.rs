@@ -11,11 +11,6 @@ use lib_core::RepoManager;
 
 pub use error::{Error, Result};
 
-#[tauri::command]
-fn greet(name: &str) -> String {
-	format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub async fn run() -> Result<()> {
 	let rm = RepoManager::default();
@@ -23,6 +18,7 @@ pub async fn run() -> Result<()> {
 	let router = handlers::router_builder().append_resource(rm.clone()).build();
 
 	tauri::Builder::default()
+		.plugin(tauri_plugin_dialog::init())
 		.plugin(
 			tauri_plugin_stronghold::Builder::new(|pass| {
 				let mut hasher = blake3::Hasher::new();

@@ -15,10 +15,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@carbon/icons": "^11.70.0",
+    "@carbon/styles": "^1.94.0",
+    "@carbon/web-components": "^2.42.0",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
-    "utils-min": "^0.2.4",
-    "dom-native": "^0.11.4"
+    "dom-native": "^0.11.4",
+    "lit-element": "^4.2.0",
+    "lit-html": "^3.3.0",
+    "utils-min": "^0.2.4"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.3",
@@ -28,7 +33,9 @@
     "@tauri-apps/cli": "^2",
     "autoprefixer": "^10.4.21",
     "pcss-cli": "^0.2.9",
+    "postcss": "^8.5.6",
     "postcss-import": "^16.1.0",
+    "postcss-nested": "^7.0.2",
     "rollup": "^4.40.0",
     "rollup-plugin-typescript2": "^0.36.0",
     "servor": "^4.0.2",

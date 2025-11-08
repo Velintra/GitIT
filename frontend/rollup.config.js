@@ -1,7 +1,6 @@
 import rollup_nre from "@rollup/plugin-node-resolve";
 import rollup_tsc from "rollup-plugin-typescript2";
 import rollup_cjs from "@rollup/plugin-commonjs";
-import rollup_multi from "@rollup/plugin-multi-entry";
 
 export default [
   {

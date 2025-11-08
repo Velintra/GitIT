@@ -5,13 +5,14 @@ import { trigger, getFirst, first } from "dom-native";
 export async function ipc_invoke(
   method: string,
   params?: object,
+  key: string = "rpcReq",
 ): Promise<any> {
-  const response: any = await invoke(method, { rpcReq: params });
+  const response: any = await invoke(method, { [key]: params });
 
   if (response.error != null) {
     console.log("ERROR - ipc_invoke - ipc_invoke error", response);
-    if (first("app-v")) {
-      trigger(getFirst("app-v"), "IPC_ORG_ERROR", {
+    if (first("root-v")) {
+      trigger(getFirst("root-v"), "IPC_ERROR", {
         detail: response.error,
       });
     }
