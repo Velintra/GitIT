@@ -1,3 +1,5 @@
+use std::string::FromUtf8Error;
+
 use derive_more::{Display, From};
 use rpc_router::RpcHandlerError;
 use serde::Serialize;
@@ -17,6 +19,11 @@ pub enum Error {
 	TauriError(#[serde_as(as = "DisplayFromStr")] tauri::Error),
 	#[from]
 	LibCore(lib_core::Error),
+	#[from]
+	Stronghold(tauri_plugin_stronghold::stronghold::Error),
+	StrongholdCredentialsNotFound,
+	StrongholdCredentialsNotUtf8,
+	StrongholdStoreFail(String),
 	#[from]
 	RpcRequestParsing(rpc_router::RpcRequestParsingError),
 	#[from]
