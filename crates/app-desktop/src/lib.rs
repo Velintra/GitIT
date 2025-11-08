@@ -5,6 +5,7 @@ mod error;
 mod handlers;
 mod ipc;
 use std::sync::Arc;
+use uuid::Uuid;
 
 use lib_core::RepoManager;
 
@@ -22,7 +23,16 @@ pub async fn run() -> Result<()> {
 	let router = handlers::router_builder().append_resource(rm.clone()).build();
 
 	tauri::Builder::default()
-		.plugin(tauri_plugin_stronghold::Builder::new(|pass| todo!()).build())
+		.plugin(
+			tauri_plugin_stronghold::Builder::new(|pass| {
+				let mut hasher = blake3::Hasher::new();
+				hasher.update(pass.as_bytes());
+				let salt = Uuid::new_v4();
+				hasher.update(salt.as_bytes());
+				hasher.finalize().as_bytes().to_vec()
+			})
+			.build(),
+		)
 		.plugin(tauri_plugin_opener::init())
 		.manage(router)
 		.invoke_handler(tauri::generate_handler![ipc::rpc_handler])
