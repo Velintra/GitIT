@@ -1,14 +1,19 @@
-use std::sync::Arc;
-
-use crate::{Ctx, error::Result, fire_model_event};
-use lib_git::Repo;
+use crate::{Ctx, RepoManager, error::Result, fire_model_event};
+use lib_git::{Branch, Repo};
 
 pub struct RepoBmc;
 
 impl RepoBmc {
-	pub fn open_repo(ctx: Ctx, path: String) -> Result<Repo> {
+	pub fn open_repo(_rm: &RepoManager, ctx: Ctx, path: String) -> Result<Repo> {
 		let repo = Repo::open(path)?;
 		fire_model_event(&ctx, "repo", "open", repo.root());
 		Ok(repo)
+	}
+
+	pub fn list_branches(rm: &RepoManager) -> Result<Vec<Branch>> {
+		let repo_guard = rm.get_repo()?;
+		let repo = repo_guard.get()?;
+		let branches = repo.list_branches()?;
+		Ok(branches)
 	}
 }
