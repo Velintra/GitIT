@@ -4,8 +4,8 @@ import { trigger, getFirst, first } from "dom-native";
 
 export async function ipc_invoke(
   method: string,
-  params?: object,
   key: string = "rpcReq",
+  params?: object,
 ): Promise<any> {
   const response: any = await invoke(method, { [key]: params });
 

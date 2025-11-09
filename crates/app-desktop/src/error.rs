@@ -15,8 +15,10 @@ pub enum Error {
 	#[from(String, &String, &str)]
 	Custom(String),
 	CtxFail,
+	#[from]
 	JsonSerde(#[serde_as(as = "DisplayFromStr")] serde_json::Error),
-	TauriError(#[serde_as(as = "DisplayFromStr")] tauri::Error),
+	#[from]
+	Tauri(#[serde_as(as = "DisplayFromStr")] tauri::Error),
 	#[from]
 	LibCore(lib_core::Error),
 	#[from]
@@ -24,6 +26,8 @@ pub enum Error {
 	StrongholdCredentialsNotFound,
 	StrongholdCredentialsNotUtf8,
 	StrongholdStoreFail(String),
+	MutexPoison,
+	VaultPathNotFound,
 	#[from]
 	RpcRequestParsing(rpc_router::RpcRequestParsingError),
 	#[from]
@@ -34,6 +38,12 @@ pub enum Error {
 		method: String,
 		error: rpc_router::Error,
 	},
+}
+
+impl<T> From<std::sync::PoisonError<T>> for Error {
+	fn from(_val: std::sync::PoisonError<T>) -> Self {
+		Self::MutexPoison
+	}
 }
 
 impl From<rpc_router::CallError> for Error {

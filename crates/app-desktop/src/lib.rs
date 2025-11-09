@@ -5,32 +5,23 @@ mod error;
 mod handlers;
 mod ipc;
 use std::sync::Arc;
+use tauri_plugin_stronghold::stronghold::Stronghold;
 use uuid::Uuid;
 
-use lib_core::RepoManager;
+use lib_core::{RepoManager, VaultManager};
 
 pub use error::{Error, Result};
 
-#[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub async fn run() -> Result<()> {
 	let rm = RepoManager::default();
+	let vm = VaultManager::default();
 
 	let router = handlers::router_builder().append_resource(rm.clone()).build();
-
 	tauri::Builder::default()
 		.plugin(tauri_plugin_dialog::init())
-		.plugin(
-			tauri_plugin_stronghold::Builder::new(|pass| {
-				let mut hasher = blake3::Hasher::new();
-				hasher.update(pass.as_bytes());
-				let salt = Uuid::new_v4();
-				hasher.update(salt.as_bytes());
-				hasher.finalize().as_bytes().to_vec()
-			})
-			.build(),
-		)
 		.plugin(tauri_plugin_opener::init())
 		.manage(router)
+		.manage(vm)
 		.invoke_handler(tauri::generate_handler![
 			ipc::rpc_handler,
 			ipc::save_credentials,

@@ -1,5 +1,5 @@
 mod rpc;
-mod stronghold;
+mod vault;
 
 pub use rpc::*;
-pub use stronghold::*;
+pub use vault::*;

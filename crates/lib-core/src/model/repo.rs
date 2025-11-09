@@ -1,12 +1,12 @@
-use crate::{Ctx, RepoManager, error::Result, fire_model_event};
+use crate::{Ctx, RepoManager, error::Result, fire_event};
 use lib_git::{Branch, Repo};
 
 pub struct RepoBmc;
 
 impl RepoBmc {
-	pub fn open_repo(_rm: &RepoManager, ctx: Ctx, path: String) -> Result<Repo> {
+	pub fn open_repo(_rm: &RepoManager, ctx: &Ctx, path: String) -> Result<Repo> {
 		let repo = Repo::open(path)?;
-		fire_model_event(&ctx, "repo", "open", repo.root());
+		fire_event(&ctx, "Model", "repo", "open", repo.root());
 		Ok(repo)
 	}
 

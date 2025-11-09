@@ -10,6 +10,7 @@ pub enum Error {
 	#[from(String, &String, &str)]
 	Custom(String),
 	MutexPoison,
+	VaultNotInitialized,
 	NoRepoOpened,
 	#[from]
 	LibGit(lib_git::Error),

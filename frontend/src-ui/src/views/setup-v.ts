@@ -14,6 +14,8 @@ import "@carbon/web-components/es/components/button/button.js";
 import "@carbon/web-components/es/components/text-input/index.js";
 import "@carbon/web-components/es/components/stack/stack.js";
 import { CDSTextInput } from "@carbon/web-components";
+import { ipc_invoke } from "../ipc";
+import { appDataDir } from "@tauri-apps/api/path";
 
 const HTML = html`
   <main>
@@ -29,16 +31,24 @@ const HTML = html`
         class="username"
         enable-counter
         max-count="50"
-      >
-      </cds-text-input>
+      ></cds-text-input>
+
       <cds-text-input
         required=""
         type="password"
         show-password-visibility-toggle=""
         class="pwd"
         label="Enter your password"
-      >
-      </cds-text-input>
+      ></cds-text-input>
+
+      <cds-text-input
+        required=""
+        type="password"
+        show-password-visibility-toggle=""
+        class="vault-pwd"
+        label="Set your vault password"
+      ></cds-text-input>
+
       <cds-button class="save">Save</cds-button>
     </cds-stack>
   </main>
@@ -50,6 +60,8 @@ const HTML = html`
 @customElement("setup-v")
 export class SetupView extends BaseViewElement {
   #pwdInputEl!: CDSTextInput;
+  #vaultPwdInputEl!: CDSTextInput;
+
   #usernameInputEl!: CDSTextInput;
 
   private get footerMessage(): HTMLElement {
@@ -68,25 +80,34 @@ export class SetupView extends BaseViewElement {
     }
   }
 
-  @onEvent("click", ".save")
-  onSave() {
-    const username = this.#usernameInputEl.value.trim() as string;
-    const pwd = this.#pwdInputEl.value.trim() as string;
+  @onHub("Handler", "creds", "save")
+  async onCredsEvt() {
+    const res = await ipc_invoke("save_credentials", "params");
+    console.log(res);
+  }
 
-    if (username === "" || pwd === "") {
-      this.message = "Both fields are required";
+  @onEvent("click", ".save")
+  async onSave() {
+    const username = this.#usernameInputEl.value.trim() as string;
+    const password = this.#pwdInputEl.value.trim() as string;
+    const vaultPwd = this.#vaultPwdInputEl.value.trim() as string;
+
+    if (username === "" || password === "" || vaultPwd === "") {
+      this.message = "All fields are required";
       return;
     }
+
     // todo call the ipc handler
   }
 
   init() {
     const content = document.importNode(HTML, true);
-    [this.#usernameInputEl, this.#pwdInputEl] = getFirst(
+    [this.#usernameInputEl, this.#pwdInputEl, this.#vaultPwdInputEl] = getFirst(
       content,
       "cds-text-input.username",
       "cds-text-input.pwd",
-    ) as [CDSTextInput, CDSTextInput];
+      "cds-text-input.vault-pwd",
+    ) as [CDSTextInput, CDSTextInput, CDSTextInput];
     this.replaceChildren(content);
   }
 }
