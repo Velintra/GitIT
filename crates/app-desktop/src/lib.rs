@@ -25,7 +25,8 @@ pub async fn run() -> Result<()> {
 		.invoke_handler(tauri::generate_handler![
 			ipc::rpc_handler,
 			ipc::save_credentials,
-			ipc::get_credentials
+			ipc::get_credentials,
+			ipc::init_vault
 		])
 		.run(tauri::generate_context!())
 		.expect("error while running tauri application");

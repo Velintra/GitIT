@@ -7,7 +7,8 @@ export async function ipc_invoke(
   key: string = "rpcReq",
   params?: object,
 ): Promise<any> {
-  const response: any = await invoke(method, { [key]: params });
+  const args = params !== undefined ? { [key]: params } : undefined;
+  const response: any = await invoke(method, args);
 
   if (response.error != null) {
     console.log("ERROR - ipc_invoke - ipc_invoke error", response);

@@ -29,13 +29,19 @@ pub struct InitVaultParams {
 pub fn init_vault(app_handle: AppHandle<Wry>, vm: State<'_, VaultManager>, params: InitVaultParams) -> Result<()> {
 	let mut vault_path = app_handle.path().app_data_dir()?;
 	vault_path.push("vault.hold");
-	let mut hasher = blake3::Hasher::new();
-	hasher.update(params.password.as_bytes());
-	let salt = Uuid::new_v4();
-	hasher.update(salt.as_bytes());
-	let password_hash = hasher.finalize().as_bytes().to_vec();
-	let stronghold = Stronghold::new(vault_path, password_hash)?;
+	let ctx = Ctx::from_app(app_handle)?;
+
+	let pwd_hash = {
+		let mut hasher = blake3::Hasher::new();
+		hasher.update(params.password.as_bytes());
+		let salt = Uuid::new_v4();
+		hasher.update(salt.as_bytes());
+		hasher.finalize().as_bytes().to_vec()
+	};
+
+	let stronghold = Stronghold::new(vault_path, pwd_hash)?;
 	vm.set_vault(stronghold)?;
+	fire_event(&ctx, "Handler", "vault", "init", true);
 
 	Ok(())
 }
