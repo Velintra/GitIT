@@ -46,7 +46,6 @@ export class StageVault extends BaseViewElement {
     if (password === "") {
       return;
     }
-
     await ipc_invoke("init_vault", "params", { password });
   }
 

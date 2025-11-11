@@ -100,6 +100,8 @@ version = "0.1.0"
 dependencies = [
  "blake3",
  "derive_more 2.0.1",
+ "iota-crypto",
+ "iota_stronghold",
  "lib-core",
  "lib-git",
  "lib-rpc",
@@ -114,6 +116,7 @@ dependencies = [
  "tauri-plugin-stronghold",
  "tokio",
  "uuid",
+ "zeroize",
 ]
 
 [[package]]
@@ -415,6 +418,7 @@ dependencies = [
  "cc",
  "cfg-if",
  "constant_time_eq 0.3.1",
+ "digest",
 ]
 
 [[package]]
@@ -3598,6 +3602,8 @@ name = "lib-core"
 version = "0.1.0"
 dependencies = [
  "derive_more 2.0.1",
+ "iota-crypto",
+ "iota_stronghold",
  "lib-git",
  "rpc-router",
  "serde",

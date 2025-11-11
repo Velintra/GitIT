@@ -14,7 +14,7 @@ pub use error::{Error, Result};
 
 pub async fn run() -> Result<()> {
 	let rm = RepoManager::default();
-	let vm = VaultManager::default();
+	let vm = Arc::new(VaultManager::default());
 
 	let router = handlers::router_builder().append_resource(rm.clone()).build();
 	tauri::Builder::default()

@@ -21,10 +21,17 @@ pub enum Error {
 	Tauri(#[serde_as(as = "DisplayFromStr")] tauri::Error),
 	#[from]
 	LibCore(lib_core::Error),
-	#[from]
-	Stronghold(tauri_plugin_stronghold::stronghold::Error),
+
 	StrongholdCredentialsNotFound,
 	StrongholdCredentialsNotUtf8,
+	VaultNotInitialized,
+	#[from]
+	IotaStronghold(#[serde_as(as = "DisplayFromStr")] iota_stronghold::ClientError),
+	#[from]
+	IotaMemory(#[serde_as(as = "DisplayFromStr")] iota_stronghold::MemoryError),
+
+	#[from]
+	IO(#[serde_as(as = "DisplayFromStr")] std::io::Error),
 	StrongholdStoreFail(String),
 	MutexPoison,
 	VaultPathNotFound,

@@ -59,9 +59,10 @@ export class SetupView extends BaseViewElement {
   @onHub("Handler", "creds", "save")
   async onCredsSave() {
     const res = await ipc_invoke("get_credentials", "params");
+    console.log(res);
   }
 
-  @onHub("Handler", "vault", "init")
+  @onHub("Handler", "vault", "init,  already_initialized")
   onVaultInit() {
     this.#contentEl.replaceChildren(elem("stage-creds"));
   }

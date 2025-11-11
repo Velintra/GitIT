@@ -8,6 +8,7 @@ import {
   onEvent,
   onHub,
   pull,
+  trigger,
 } from "dom-native";
 import { BaseViewElement } from "../../base-v";
 import "@carbon/web-components/es/components/button/button.js";
@@ -52,7 +53,6 @@ export class StageCreds extends BaseViewElement {
     if (password === "" || username === "") {
       return;
     }
-
     await ipc_invoke("save_credentials", "params", { username, password });
   }
 
