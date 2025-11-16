@@ -18,11 +18,22 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
+lib-rpc = {path = "../lib-rpc"}
+lib-core = {path = "../lib-core"}
+lib-git = {path = "../lib-git"}
+
 tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
+serde_with = {workspace=true }
+blake3 = {version="1.5.5", features=["traits-preview"]}
 serde = {workspace = true}
 serde_json = {workspace = true}
 tauri-plugin-stronghold = "2"
 tokio = {workspace = true}
-value-ext = {workspace = true}
 derive_more = {workspace = true}
+rpc-router = {workspace = true}
+uuid = {version = "1", features = ["v4", "fast-rng",] }
+tauri-plugin-dialog = "2"
+iota_stronghold = "2"
+iota-crypto = "0.23"
+zeroize = "1.8.2"

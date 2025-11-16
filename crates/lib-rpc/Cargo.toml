@@ -11,3 +11,4 @@ rpc-router = {workspace = true}
 derive_more = {workspace = true}
 serde = {workspace = true}
 serde_json = {workspace = true}
+lib-core = {path="../lib-core"}

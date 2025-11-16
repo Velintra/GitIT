@@ -1,8 +1,10 @@
-use git2::Oid;
+use gix::ObjectId;
+use serde::Serialize;
 
+#[derive(Debug, Clone, Serialize)]
 pub struct Commit {
-	pub id: Oid,
-	pub tree: Oid,
+	pub id: ObjectId,
+	pub tree: ObjectId,
 	pub message: String,
 	pub author: String,
 	pub time: i64,

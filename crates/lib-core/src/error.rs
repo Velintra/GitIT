@@ -1,16 +1,23 @@
 use derive_more::{Display, From};
-
+use serde::Serialize;
+use serde_with::DisplayFromStr;
+use serde_with::serde_as;
 pub type Result<T> = core::result::Result<T, Error>;
 
-#[derive(Debug, Display, From)]
+#[serde_as]
+#[derive(Debug, Serialize, Display, From)]
 #[display("{self:?}")]
 pub enum Error {
 	#[from(String, &String, &str)]
 	Custom(String),
 	MutexPoison,
-	// -- Externals
+	VaultNotInitialized,
+	NoRepoOpened,
 	#[from]
-	Io(std::io::Error), // as example
+	IotaStronghold(#[serde_as(as = "DisplayFromStr")] iota_stronghold::ClientError),
+	#[from]
+	LibGit(lib_git::Error),
+	// -- Externals
 }
 
 impl<T> From<std::sync::PoisonError<T>> for Error {

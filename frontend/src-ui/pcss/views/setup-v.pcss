@@ -1,0 +1,35 @@
+setup-v {
+    display: grid;
+    place-items: center; /* centers <main> horizontally & vertically */
+
+    main {
+        display: grid;
+        gap: 1rem;
+        width: 100%;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+
+    p {
+        color: #555;
+    }
+
+    cds-text-input,
+    cds-button {
+        width: 100%;
+    }
+
+    footer {
+        &.has-message {
+            .message {
+                padding: 0 1rem;
+            }
+        }
+    }
+}

@@ -10,8 +10,8 @@ lerna-debug.log*
 node_modules
 target/
 dist
-dist-ui/js
-dist-ui/css
+frontend/dist-ui/js/*
+frontend/dist-ui/css/*
 !dist-ui/*.html
 dist-ssr
 .out/*
