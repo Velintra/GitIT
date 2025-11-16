@@ -1,4 +1,7 @@
-use crate::{ipc::vault::support, Error, Result};
+use crate::{
+	ipc::vault::support::{self, hash_blake3},
+	Error, Result,
+};
 use iota_stronghold::{KeyProvider, SnapshotPath, Stronghold};
 use lib_core::{fire_event, Ctx, VaultManager};
 use serde::{Deserialize, Serialize};
@@ -27,29 +30,28 @@ pub struct InitVaultParams {
 	pub password: String,
 }
 
+// TODO: VaultWorker in the background
 #[tauri::command]
 pub fn init_vault(app_handle: AppHandle<Wry>, vm: State<'_, Arc<VaultManager>>, params: InitVaultParams) -> Result<()> {
 	let mut vault_path = app_handle.path().app_data_dir()?;
 	std::fs::create_dir_all(&vault_path)?;
-	vault_path.push("vault.hold");
+	vault_path.push("vault.gitit");
 	let ctx = Ctx::from_app(app_handle)?;
-
-	let mut hasher = blake3::Hasher::new();
-	hasher.update(params.password.as_bytes());
-	hasher.update(b"very-nice-saltyy-salt");
-	let key_bytes_vec = hasher.finalize().as_bytes().to_vec();
-	let key_bytes = Zeroizing::new(key_bytes_vec);
-
-	let keyprovider = KeyProvider::try_from(key_bytes)?;
 	let stronghold = Stronghold::default();
+
+	let _client = stronghold.create_client(b"velintra")?;
+	stronghold.write_client(b"velintra")?;
+
+	let key = hash_blake3(params.password, "verynicesalt".into());
+
+	let keyprovider = KeyProvider::try_from(key)?;
 	let path = SnapshotPath::from_path(&vault_path);
 
 	if path.exists() {
 		stronghold.load_snapshot(&keyprovider, &path)?;
 	} else {
 		let _client = stronghold.create_client(b"velintra")?;
-		stronghold.write_client(b"velintra")?;
-		stronghold.commit_with_keyprovider(&path, &keyprovider)?; // FIXME: Crashes the app
+		stronghold.commit_with_keyprovider(&path, &keyprovider)?;
 	}
 
 	vm.set_vault(stronghold)?;
