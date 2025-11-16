@@ -1,5 +1,6 @@
 use derive_more::{Display, From};
 use serde::Serialize;
+use serde_with::DisplayFromStr;
 use serde_with::serde_as;
 pub type Result<T> = core::result::Result<T, Error>;
 
@@ -10,7 +11,10 @@ pub enum Error {
 	#[from(String, &String, &str)]
 	Custom(String),
 	MutexPoison,
+	VaultNotInitialized,
 	NoRepoOpened,
+	#[from]
+	IotaStronghold(#[serde_as(as = "DisplayFromStr")] iota_stronghold::ClientError),
 	#[from]
 	LibGit(lib_git::Error),
 	// -- Externals

@@ -14,3 +14,6 @@ derive_more = {workspace = true}
 serde = {workspace=true}
 rpc-router = {workspace = true}
 serde_with = {workspace=true }
+tauri-plugin-stronghold = "2"
+iota_stronghold = "2"
+iota-crypto = "0.23"

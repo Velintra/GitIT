@@ -1,6 +1,7 @@
 use gix::ObjectId;
+use serde::Serialize;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Commit {
 	pub id: ObjectId,
 	pub tree: ObjectId,

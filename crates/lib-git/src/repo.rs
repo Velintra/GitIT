@@ -1,6 +1,6 @@
 use crate::{
-	Branch,
-	error::{Error, Result},
+	Branch, Commit,
+	error::{Error, Result, parse_fail},
 };
 use gix::{
 	ObjectId, ThreadSafeRepository,
@@ -8,6 +8,7 @@ use gix::{
 	create::Options,
 	diff::index::Change,
 	progress,
+	revision::walk::Sorting,
 	status::{UntrackedFiles, index_worktree::iter::Summary},
 };
 
@@ -25,7 +26,7 @@ pub struct Repo {
 #[derive(Debug, Serialize)]
 pub struct FileStatus {
 	pub path: String,
-	pub summary: String, // e.g. Modified - "M " "A " "??"
+	pub summary: String, // e.g. +, -, ~, ->
 }
 
 impl Repo {
@@ -134,53 +135,71 @@ impl Repo {
 		Ok(files)
 	}
 
-	// pub fn list_commits_in_branch(&self, branch: &str) -> Result<Vec<Commit>> {
-	// 	let branch = self.inner.find_branch(branch, git2::BranchType::Local)?;
-	// 	let branch = branch.into_reference();
+	pub fn list_commits_in_branch(&self, branch: &str) -> Result<Vec<Commit>> {
+		let repo = self.inner.to_thread_local();
+		let reference = repo
+			.find_reference(format!("refs/heads/{branch}").as_str())
+			.map_err(parse_fail)?;
 
-	// 	let oid = branch.target().ok_or(Error::InvalidBranchTarget)?;
-	// 	let mut revwalk = self.inner.revwalk()?;
-	// 	revwalk.push(oid)?;
-	// 	revwalk.set_sorting(Sort::TIME)?;
+		// TODO: split into multiple lines without ownership issues
+		let revwalk = repo.rev_walk([reference.target().id()]).sorting(Sorting::ByCommitTime(
+			gix::traverse::commit::simple::CommitTimeOrder::NewestFirst,
+		));
 
-	// 	let mut commits = Vec::new();
-	// 	for commit_id in revwalk {
-	// 		let commit_id = commit_id?;
-	// 		let commit = self.find_commit(commit_id)?;
-	// 		commits.push(commit);
-	// 	}
-	// 	Ok(commits)
-	// }
+		let mut commits = Vec::new();
+		for info in revwalk.all()? {
+			let info = info?;
+			let commit = repo.find_commit(info.id)?;
+			let message = commit.message().map_err(parse_fail)?;
+			let author = commit.author().map_err(parse_fail)?;
+			let committer = commit.committer().map_err(parse_fail)?;
 
-	// pub fn find_commit(&self, id: gix::ObjectId) -> Result<Commit> {
-	// 	let repo = self.inner.to_thread_local();
-	// 	let commit = repo.find_object(id)?.try_into_commit()?;
-	// 	let tree_id = commit.tree_id()?;
-	// 	Ok(Commit {
-	// 		id: commit.id,
-	// 		tree: commit.tree()?.id,
-	// 		message: commit.message.unwrap_or("<unknown>".into()),
-	// 		author: commit
-	// 			.author()
-	// 			.map(|a| a.name.unwrap_or("<unknown>".into()))
-	// 			.unwrap_or("<unknown>".into()),
-	// 		time: commit.committer().map(|c| c.time.seconds_since_unix_epoch).unwrap_or(0),
-	// 	})
-	// }
+			let time = committer.time().map_err(parse_fail)?.seconds;
 
-	// pub fn head_commit(&self) -> Result<Commit> {
-	// 	let repo = self.inner.to_thread_local();
+			commits.push(Commit {
+				id: commit.id,
+				tree: commit.tree_id().map_err(parse_fail)?.into(),
+				message: message.body.unwrap_or("<unknown>".into()).to_string(),
+				author: author.name.to_string(),
+				time,
+			});
+		}
+		Ok(commits)
+	}
 
-	// 	let head = repo.head_commit()?;
-	// 	Ok(Commit {
-	// 		id: head.id,
-	// 		tree: head.tree_id,
-	// 		message: head.message.unwrap_or("<unknown>".into()),
-	// 		author: head
-	// 			.author()?
-	// 			.map(|a| a.name.unwrap_or("<unknown>".into()))
-	// 			.unwrap_or("<unknown>".into()),
-	// 		time: head.committer.map(|c| c.time.seconds_since_unix_epoch).unwrap_or(0),
-	// 	})
-	// }
+	pub fn find_commit(&self, id: ObjectId) -> Result<Commit> {
+		let repo = self.inner.to_thread_local();
+		let commit = repo.find_object(id)?.try_into_commit()?;
+		let tree_id = commit.tree_id().map_err(parse_fail)?;
+		let message = commit.message().map_err(parse_fail)?;
+		let author = commit.author().map_err(parse_fail)?;
+		let committer = commit.committer().map_err(parse_fail)?;
+		let time = committer.time().map_err(parse_fail)?.seconds;
+
+		Ok(Commit {
+			id: commit.id,
+			tree: ObjectId::from(tree_id),
+			message: message.body.unwrap_or("<unknown>".into()).to_string(),
+			author: author.name.to_string(),
+			time,
+		})
+	}
+
+	pub fn head_commit(&self) -> Result<Commit> {
+		let repo = self.inner.to_thread_local();
+
+		let head = repo.head_commit()?;
+		let tree_id = head.tree_id().map_err(parse_fail)?;
+		let message = head.message().map_err(parse_fail)?;
+		let author = head.author().map_err(parse_fail)?;
+		let committer = head.committer().map_err(parse_fail)?;
+		let time = committer.time().map_err(parse_fail)?.seconds;
+		Ok(Commit {
+			id: head.id,
+			tree: ObjectId::from(tree_id),
+			message: message.body.unwrap_or("<unknown>".into()).to_string(),
+			author: author.name.to_string(),
+			time,
+		})
+	}
 }
