@@ -1,12 +1,9 @@
 use crate::{Error, Result};
 use blake3;
 use iota_stronghold::Store;
-use lib_core::{fire_event, Ctx};
 use zeroize::Zeroizing;
 
-use tauri_plugin_stronghold::stronghold::Stronghold;
-
-pub fn save_to_vault(vault: &Store, key: &str, value: &str) -> Result<()> {
+pub fn _save_to_vault(vault: &Store, key: &str, value: &str) -> Result<()> {
 	vault
 		.insert(key.as_bytes().to_vec(), value.as_bytes().to_vec(), None)
 		.map_err(|err| Error::StrongholdStoreFail(err.to_string()))?;

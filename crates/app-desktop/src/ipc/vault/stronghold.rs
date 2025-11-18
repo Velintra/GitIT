@@ -1,14 +1,12 @@
 use crate::{
 	ipc::vault::support::{self, hash_blake3},
-	Error, Result,
+	Result,
 };
 use iota_stronghold::{KeyProvider, SnapshotPath, Stronghold};
 use lib_core::{fire_event, Ctx, VaultManager};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tauri::{AppHandle, Manager, State, Wry};
-use uuid::Uuid;
-use zeroize::Zeroizing;
 
 const USERNAME_KEY: &str = "git_username";
 const PWD_KEY: &str = "git_password";

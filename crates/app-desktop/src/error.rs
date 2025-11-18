@@ -1,5 +1,3 @@
-use std::string::FromUtf8Error;
-
 use derive_more::{Display, From};
 use rpc_router::RpcHandlerError;
 use serde::Serialize;

@@ -5,8 +5,6 @@ mod error;
 mod handlers;
 mod ipc;
 use std::sync::Arc;
-use tauri_plugin_stronghold::stronghold::Stronghold;
-use uuid::Uuid;
 
 use lib_core::{RepoManager, VaultManager};
 

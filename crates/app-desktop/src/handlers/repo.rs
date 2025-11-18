@@ -17,7 +17,7 @@ pub async fn open_repo(rm: RepoManager, ctx: Ctx, params: ParamsForOpen) -> Resu
 	Ok(root.into())
 }
 
-pub async fn list_branches(rm: RepoManager, ctx: Ctx) -> Result<DataIpcResult<Vec<Branch>>> {
+pub async fn list_branches(rm: RepoManager, _ctx: Ctx) -> Result<DataIpcResult<Vec<Branch>>> {
 	let branches = RepoBmc::list_branches(&rm)?;
 	Ok(branches.into())
 }

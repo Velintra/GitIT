@@ -8,6 +8,7 @@ members = [
     "crates/lib-core",
     "crates/lib-git",
     "crates/lib-rpc",
+    "crates/lib-event"
 ]
 
 [workspace.dependencies]
