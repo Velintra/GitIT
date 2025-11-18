@@ -11,4 +11,6 @@ pub enum AppEvent {
 #[serde_as]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum TauriEvent {}
+pub enum TauriEvent {
+	InitVault { password: String },
+}

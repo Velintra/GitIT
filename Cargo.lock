@@ -103,6 +103,7 @@ dependencies = [
  "iota-crypto",
  "iota_stronghold",
  "lib-core",
+ "lib-event",
  "lib-git",
  "lib-rpc",
  "rpc-router",

@@ -4,6 +4,7 @@
 mod error;
 mod handlers;
 mod ipc;
+mod worker;
 use std::sync::Arc;
 
 use lib_core::{RepoManager, VaultManager};

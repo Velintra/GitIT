@@ -3,11 +3,11 @@ use flume::{Receiver, Sender};
 use serde::{de::DeserializeOwned, Serialize};
 
 #[derive(Clone)]
-pub struct AppTxW {
+pub struct AppTx {
 	evt_tx: EventTx<AppEvent>,
 }
 
-impl AppTxW {
+impl AppTx {
 	pub fn new(evt_tx: EventTx<AppEvent>) -> Self {
 		Self { evt_tx }
 	}
