@@ -16,6 +16,7 @@ import "@carbon/web-components/es/components/stack/stack.js";
 import { CDSTextInput } from "@carbon/web-components";
 import { ipc_invoke } from "../../ipc";
 import { appDataDir } from "@tauri-apps/api/path";
+import "@carbon/web-components/es/components/loading/index.js";
 
 const HTML = html`
   <main>
@@ -35,9 +36,6 @@ const HTML = html`
 
 @customElement("setup-v")
 export class SetupView extends BaseViewElement {
-  #pwdInputEl!: CDSTextInput;
-  #vaultPwdInputEl!: CDSTextInput;
-  #usernameInputEl!: CDSTextInput;
   #contentEl!: HTMLElement;
 
   private get footerMessage(): HTMLElement {
@@ -56,14 +54,24 @@ export class SetupView extends BaseViewElement {
     }
   }
 
+  @onEvent("VAULT_INIT_START")
+  onInitStart() {
+    this.classList.add("vault-init-loading");
+
+    this.#contentEl.replaceChildren(elem("cds-loading", { active: true }));
+  }
+
   @onHub("Handler", "creds", "save")
   async onCredsSave() {
     const res = await ipc_invoke("get_credentials", "params");
+
     console.log(res);
   }
 
   @onHub("Handler", "vault", "init,  already_initialized")
   onVaultInit() {
+    this.classList.remove("vault-init-loading");
+
     this.#contentEl.replaceChildren(elem("stage-creds"));
   }
 

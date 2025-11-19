@@ -6,11 +6,11 @@ use serde_with::serde_as;
 #[serde(untagged)]
 pub enum AppEvent {
 	#[from]
-	Tauri(TauriEvent),
+	Vault(VaultEvent),
 }
 #[serde_as]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum TauriEvent {
+pub enum VaultEvent {
 	InitVault { password: String },
 }

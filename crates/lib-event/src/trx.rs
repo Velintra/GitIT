@@ -40,6 +40,7 @@ impl<T> From<Sender<T>> for EventTx<T> {
 	}
 }
 
+#[derive(Clone)]
 pub struct EventRx<T> {
 	rx: Receiver<T>,
 }

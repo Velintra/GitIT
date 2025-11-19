@@ -8,6 +8,8 @@ doctest = false
 
 [dependencies]
 lib-git = {path = "../lib-git"}
+lib-event = {path = "../lib-event"}
+
 
 tauri = { version = "2", features = [] }
 derive_more = {workspace = true}

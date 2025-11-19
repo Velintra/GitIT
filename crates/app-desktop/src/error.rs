@@ -19,7 +19,8 @@ pub enum Error {
 	Tauri(#[serde_as(as = "DisplayFromStr")] tauri::Error),
 	#[from]
 	LibCore(lib_core::Error),
-
+	#[from]
+	LibEvent(lib_event::Error),
 	StrongholdCredentialsNotFound,
 	StrongholdCredentialsNotUtf8,
 	VaultNotInitialized,

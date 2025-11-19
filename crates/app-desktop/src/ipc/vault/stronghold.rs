@@ -1,9 +1,9 @@
 use crate::{stronghold_utils, Result};
-use iota_stronghold::{KeyProvider, SnapshotPath, Stronghold};
-use lib_core::{fire_event, Ctx, VaultManager};
+use lib_core::{fire_event, Ctx, ModelManager, VaultManager};
+use lib_event::VaultEvent;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
-use tauri::{AppHandle, Manager, State, Wry};
+use tauri::{AppHandle, State, Wry};
 
 const USERNAME_KEY: &str = "git_username";
 const PWD_KEY: &str = "git_password";
@@ -25,33 +25,15 @@ pub struct InitVaultParams {
 	pub password: String,
 }
 
-// TODO: VaultWorker in the background
 #[tauri::command]
-pub fn init_vault(app_handle: AppHandle<Wry>, vm: State<'_, Arc<VaultManager>>, params: InitVaultParams) -> Result<()> {
-	// let mut vault_path = app_handle.path().app_data_dir()?;
-	// std::fs::create_dir_all(&vault_path)?;
-	// vault_path.push("vault.gitit");
-	// let ctx = Ctx::from_app(app_handle)?;
-	// let stronghold = Stronghold::default();
+pub async fn init_vault(mm: State<'_, Arc<ModelManager>>, params: InitVaultParams) -> Result<()> {
+	let tx = mm.app_tx().evt_tx();
 
-	// let _client = stronghold.create_client(b"velintra")?;
-	// stronghold.write_client(b"velintra")?;
+	let evt = VaultEvent::InitVault {
+		password: params.password,
+	};
 
-	// let key = hash_blake3(params.password, "verynicesalt".into());
-
-	// let keyprovider = KeyProvider::try_from(key)?;
-	// let path = SnapshotPath::from_path(&vault_path);
-
-	// if path.exists() {
-	// 	stronghold.load_snapshot(&keyprovider, &path)?;
-	// } else {
-	// 	let _client = stronghold.create_client(b"velintra")?;
-	// 	stronghold.commit_with_keyprovider(&path, &keyprovider)?;
-	// }
-
-	// vm.set_vault(stronghold)?;
-
-	// fire_event(&ctx, "Handler", "vault", "init", true);
+	tx.send(evt.into()).await?;
 
 	Ok(())
 }

@@ -3617,6 +3617,7 @@ dependencies = [
  "derive_more 2.0.1",
  "iota-crypto",
  "iota_stronghold",
+ "lib-event",
  "lib-git",
  "rpc-router",
  "serde",

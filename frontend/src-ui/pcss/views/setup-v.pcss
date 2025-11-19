@@ -1,6 +1,16 @@
 setup-v {
     display: grid;
-    place-items: center; /* centers <main> horizontally & vertically */
+    place-items: center;
+
+    &.vault-init-loading section.content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &.vault-init-loading main > :not(section.content) {
+        display: none;
+    }
 
     main {
         display: grid;
