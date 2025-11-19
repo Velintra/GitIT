@@ -1,7 +1,4 @@
-use crate::{
-	ipc::vault::support::{self, hash_blake3},
-	Result,
-};
+use crate::{stronghold_utils, Result};
 use iota_stronghold::{KeyProvider, SnapshotPath, Stronghold};
 use lib_core::{fire_event, Ctx, VaultManager};
 use serde::{Deserialize, Serialize};
@@ -31,30 +28,30 @@ pub struct InitVaultParams {
 // TODO: VaultWorker in the background
 #[tauri::command]
 pub fn init_vault(app_handle: AppHandle<Wry>, vm: State<'_, Arc<VaultManager>>, params: InitVaultParams) -> Result<()> {
-	let mut vault_path = app_handle.path().app_data_dir()?;
-	std::fs::create_dir_all(&vault_path)?;
-	vault_path.push("vault.gitit");
-	let ctx = Ctx::from_app(app_handle)?;
-	let stronghold = Stronghold::default();
+	// let mut vault_path = app_handle.path().app_data_dir()?;
+	// std::fs::create_dir_all(&vault_path)?;
+	// vault_path.push("vault.gitit");
+	// let ctx = Ctx::from_app(app_handle)?;
+	// let stronghold = Stronghold::default();
 
-	let _client = stronghold.create_client(b"velintra")?;
-	stronghold.write_client(b"velintra")?;
+	// let _client = stronghold.create_client(b"velintra")?;
+	// stronghold.write_client(b"velintra")?;
 
-	let key = hash_blake3(params.password, "verynicesalt".into());
+	// let key = hash_blake3(params.password, "verynicesalt".into());
 
-	let keyprovider = KeyProvider::try_from(key)?;
-	let path = SnapshotPath::from_path(&vault_path);
+	// let keyprovider = KeyProvider::try_from(key)?;
+	// let path = SnapshotPath::from_path(&vault_path);
 
-	if path.exists() {
-		stronghold.load_snapshot(&keyprovider, &path)?;
-	} else {
-		let _client = stronghold.create_client(b"velintra")?;
-		stronghold.commit_with_keyprovider(&path, &keyprovider)?;
-	}
+	// if path.exists() {
+	// 	stronghold.load_snapshot(&keyprovider, &path)?;
+	// } else {
+	// 	let _client = stronghold.create_client(b"velintra")?;
+	// 	stronghold.commit_with_keyprovider(&path, &keyprovider)?;
+	// }
 
-	vm.set_vault(stronghold)?;
+	// vm.set_vault(stronghold)?;
 
-	fire_event(&ctx, "Handler", "vault", "init", true);
+	// fire_event(&ctx, "Handler", "vault", "init", true);
 
 	Ok(())
 }
@@ -68,7 +65,7 @@ pub fn save_credentials(
 	let ctx = Ctx::from_app(app_handle)?;
 	let client = vm.get_or_create_client(b"velintra")?;
 
-	support::save_multiple_to_vault(
+	stronghold_utils::save_multiple_to_vault(
 		&client.store(),
 		&[(USERNAME_KEY, &params.username), (PWD_KEY, &params.password)],
 	)?;
@@ -82,8 +79,8 @@ pub fn save_credentials(
 pub fn get_credentials(vm: State<'_, Arc<VaultManager>>) -> Result<Credentials> {
 	let client = vm.get_or_create_client(b"velintra")?;
 
-	let username = support::get_from_vault(&client.store(), USERNAME_KEY)?;
-	let password = support::get_from_vault(&client.store(), PWD_KEY)?;
+	let username = stronghold_utils::get_from_vault(&client.store(), USERNAME_KEY)?;
+	let password = stronghold_utils::get_from_vault(&client.store(), PWD_KEY)?;
 
 	Ok(Credentials { username, password })
 }

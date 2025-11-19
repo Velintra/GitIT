@@ -4,6 +4,7 @@
 mod error;
 mod handlers;
 mod ipc;
+mod stronghold_utils;
 mod worker;
 use std::sync::Arc;
 

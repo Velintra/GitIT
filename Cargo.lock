@@ -3622,7 +3622,6 @@ dependencies = [
  "serde",
  "serde_with",
  "tauri",
- "tauri-plugin-stronghold",
 ]
 
 [[package]]
