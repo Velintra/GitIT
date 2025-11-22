@@ -11,13 +11,16 @@ import {
 import { BaseViewElement } from "../base-v";
 
 const HTML = html`
+  <header>
+    <app-header></app-header>
+  </header>
   <main>
-    <app-v></app-v>
+    <p>Welcome</p>
   </main>
 `;
 
-@customElement("root-v")
-export class RootView extends BaseViewElement {
+@customElement("app-v")
+export class AppView extends BaseViewElement {
   #mainEl!: HTMLElement;
 
   init() {
@@ -29,6 +32,6 @@ export class RootView extends BaseViewElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "root-v": RootView;
+    "app-v": AppView;
   }
 }
