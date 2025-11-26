@@ -29,7 +29,7 @@ impl Plugin<Wry> for VaultPlugin {
 	fn initialize(
 		&mut self,
 		app: &AppHandle<Wry>,
-		config: serde_json::Value,
+		_config: serde_json::Value,
 	) -> Result<(), Box<dyn std::error::Error>> {
 		let res = VaultWorker::start(self.rx.clone(), self.vm.clone(), app.clone())?;
 		Ok(res)

@@ -19,6 +19,7 @@
     "@carbon/styles": "^1.94.0",
     "@carbon/web-components": "^2.42.0",
     "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-dialog": "^2.4.2",
     "@tauri-apps/plugin-opener": "^2",
     "@tauri-apps/plugin-stronghold": "^2.0.0-beta.0",
     "dom-native": "^0.11.4",
