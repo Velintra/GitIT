@@ -51,13 +51,12 @@ impl Repo {
 
 	pub fn name(&self) -> String {
 		self.inner
-			.path()
-			.file_name()
-			.and_then(|os_str| os_str.to_str())
+			.work_dir()
+			.and_then(|p| p.file_name())
+			.and_then(|n| n.to_str())
 			.unwrap_or("<unknown>")
 			.to_string()
 	}
-
 	pub fn list_branches(&self) -> Result<Vec<Branch>> {
 		let repo = self.inner.to_thread_local();
 		let mut branches = Vec::new();

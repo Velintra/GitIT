@@ -12,7 +12,7 @@ pub async fn open_repo(rm: RepoManager, ctx: Ctx, params: ParamsForOpen) -> Resu
 	let ParamsForOpen { path } = params;
 
 	let repo = RepoBmc::open_repo(&rm, &ctx, path)?;
-	let root = repo.root();
+	let root = repo.name();
 	rm.set_repo(repo)?;
 	Ok(root.into())
 }

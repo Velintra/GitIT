@@ -1,4 +1,5 @@
 import { ipc_invoke } from "../ipc";
+import { makeRpcRequest, RpcSuccess } from "../rpc-utils";
 
 class BaseFmc {
   #cmd_suffix: string;
@@ -18,12 +19,10 @@ class RepoFmc extends BaseFmc {
   }
 
   async open(path: string): Promise<string> {
-    return ipc_invoke("rpc_handler", "rpcReq", {
-      jsonrpc: "2.0",
-      id: 1,
-      method: `open_${this.cmd_suffix}`,
-      params: { path },
-    }).then((r) => r.result.data);
+    const req = makeRpcRequest(`open_${this.cmd_suffix}`, { path });
+    return ipc_invoke("rpc_handler", "rpcReq", req).then(
+      (r: RpcSuccess<string>) => r.result.data,
+    );
   }
 }
 
