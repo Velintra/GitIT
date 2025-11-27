@@ -1,3 +1,4 @@
+import { Branch } from "../bindings";
 import { ipc_invoke } from "../ipc";
 import { makeRpcRequest, RpcSuccess } from "../rpc-utils";
 
@@ -16,6 +17,13 @@ class BaseFmc {
 class RepoFmc extends BaseFmc {
   constructor() {
     super("repo");
+  }
+
+  async list_branches(): Promise<Branch[]> {
+    const req = makeRpcRequest(`list_branches`);
+    return ipc_invoke("rpc_handler", "rpcReq", req).then(
+      (r: RpcSuccess<Branch[]>) => r.result.data,
+    );
   }
 
   async open(path: string): Promise<string> {

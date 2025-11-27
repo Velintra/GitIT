@@ -1,0 +1,38 @@
+branch-v {
+    width: 100%;
+
+    section {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+branch-tile {
+    .branch-tile {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        gap: 0.2rem 0.5rem;
+        padding: 1rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .name {
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+        font-weight: 500;
+    }
+
+    .type {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+        justify-self: end;
+    }
+
+    .id {
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+        font-size: 0.8rem;
+        color: #777;
+    }
+}
