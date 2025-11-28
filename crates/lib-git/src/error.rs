@@ -1,4 +1,5 @@
 use derive_more::{Display, From};
+use gix::reference;
 use serde::Serialize;
 use serde_with::{DisplayFromStr, serde_as};
 
@@ -40,8 +41,11 @@ pub enum Error {
 	#[from]
 	GixRevisionWalkIter(#[serde_as(as = "DisplayFromStr")] gix::revision::walk::iter::Error),
 	#[from]
-	GixFindExisting(#[serde_as(as = "DisplayFromStr")] gix::object::find::existing::with_conversion::Error), // #[from]
-	                                                                                                         // Git2(#[serde_as(as = "DisplayFromStr")] git2::Error),
+	GixFindExisting(#[serde_as(as = "DisplayFromStr")] gix::object::find::existing::with_conversion::Error),
+	#[from]
+	GixRefNameError(#[serde_as(as = "DisplayFromStr")] gix::validate::reference::name::Error), // #[from]
+	#[from]
+	GixRefEditError(#[serde_as(as = "DisplayFromStr")] gix::reference::edit::Error), // Git2(#[serde_as(as = "DisplayFromStr")] git2::Error),
 }
 
 pub(crate) fn parse_fail<E: std::fmt::Display>(err: E) -> Error {

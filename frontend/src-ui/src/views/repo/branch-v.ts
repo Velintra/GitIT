@@ -25,6 +25,11 @@ const HTML = html` <section></section> `;
 export class BranchView extends BaseViewElement {
   #contentEl!: HTMLElement;
 
+  @onHub("Model", "branch", "create, delete")
+  onChange() {
+    this.refreshContent();
+  }
+
   async refreshContent(first_refresh?: boolean) {
     const branches = await repoFmc.list_branches();
 

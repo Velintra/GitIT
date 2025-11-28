@@ -8,6 +8,7 @@ use gix::{
 	create::Options,
 	diff::index::Change,
 	progress,
+	refs::FullName,
 	revision::walk::Sorting,
 	status::{UntrackedFiles, index_worktree::iter::Summary},
 };
@@ -57,11 +58,29 @@ impl Repo {
 			.unwrap_or("<unknown>")
 			.to_string()
 	}
+
+	pub fn create_branch(&self, name: &str) -> Result<ObjectId> {
+		let repo = self.inner.to_thread_local();
+
+		let target_oid = repo.head_commit()?.id;
+
+		let branch_ref_name = format!("refs/heads/{}", name);
+		let branch_ref_name = FullName::try_from(branch_ref_name.as_str())?;
+
+		let branch = repo.reference(
+			branch_ref_name,
+			target_oid,
+			gix::refs::transaction::PreviousValue::MustNotExist,
+			format!("created branch {name}"),
+		)?;
+
+		Ok(branch.id().detach())
+	}
+
 	pub fn list_branches(&self) -> Result<Vec<Branch>> {
 		let repo = self.inner.to_thread_local();
 		let mut branches = Vec::new();
 
-		// Local
 		let refs = repo.references()?;
 		let heads = refs.prefixed("refs/heads/")?;
 		let peeled = heads.peeled()?;
