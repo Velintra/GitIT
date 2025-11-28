@@ -14,6 +14,7 @@ pub enum Error {
 	// -- Externals
 	InvalidBranchTarget,
 	GixObjectParseFail(String),
+	BranchNotExist,
 	#[from]
 	GixDiscover(#[serde_as(as = "DisplayFromStr")] gix::discover::Error),
 	#[from]
@@ -46,6 +47,8 @@ pub enum Error {
 	GixRefNameError(#[serde_as(as = "DisplayFromStr")] gix::validate::reference::name::Error), // #[from]
 	#[from]
 	GixRefEditError(#[serde_as(as = "DisplayFromStr")] gix::reference::edit::Error), // Git2(#[serde_as(as = "DisplayFromStr")] git2::Error),
+	#[from]
+	GixFindReferror(#[serde_as(as = "DisplayFromStr")] gix::reference::find::existing::Error),
 }
 
 pub(crate) fn parse_fail<E: std::fmt::Display>(err: E) -> Error {

@@ -8,7 +8,7 @@ use gix::{
 	create::Options,
 	diff::index::Change,
 	progress,
-	refs::FullName,
+	refs::{FullName, PartialNameRef, transaction::PreviousValue},
 	revision::walk::Sorting,
 	status::{UntrackedFiles, index_worktree::iter::Summary},
 };
@@ -75,6 +75,18 @@ impl Repo {
 		)?;
 
 		Ok(branch.id().detach())
+	}
+
+	pub fn delete_branch(&self, name: &str) -> Result<ObjectId> {
+		let repo = self.inner.to_thread_local();
+		let branch_ref_name = format!("refs/heads/{}", name);
+
+		let reference = repo.find_reference(&branch_ref_name)?;
+		let target = reference.target();
+
+		reference.delete()?;
+
+		Ok(target.id().into())
 	}
 
 	pub fn list_branches(&self) -> Result<Vec<Branch>> {
