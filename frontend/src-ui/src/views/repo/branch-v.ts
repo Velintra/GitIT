@@ -7,6 +7,8 @@ import {
   frag,
   getFirst,
   html,
+  on,
+  OnEvent,
   onEvent,
   onHub,
 } from "dom-native";
@@ -18,8 +20,14 @@ import "@carbon/web-components/es/components/tile/index.js";
 import { Branch } from "src-ui/src/bindings";
 import { TAG_TYPE } from "@carbon/web-components/es/components/tag/defs";
 import "@carbon/web-components/es/components/tag/index.js";
+import "@carbon/web-components/es/components/button/index.js";
 
-const HTML = html` <section></section> `;
+const HTML = html`
+  <div class="top-bar">
+    <cds-button class="add-btn">Create a Branch</cds-button>
+  </div>
+  <section></section>
+`;
 
 @customElement("branch-v")
 export class BranchView extends BaseViewElement {
@@ -28,6 +36,20 @@ export class BranchView extends BaseViewElement {
   @onHub("Model", "branch", "create, delete")
   onChange() {
     this.refreshContent();
+  }
+
+  @onEvent("click", ".add-btn")
+  onCreateClick() {
+    const el = elem("branch-add-m");
+    this.appendChild(el);
+    on(el, "BRANCH-ADD", async (evt: OnEvent<{ name: string }>) => {
+      try {
+        const id = await repoFmc.create_branch(evt.detail.name);
+        console.log(id);
+      } catch (ex) {
+        console.log(ex);
+      }
+    });
   }
 
   async refreshContent(first_refresh?: boolean) {

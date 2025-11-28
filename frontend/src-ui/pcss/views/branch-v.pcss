@@ -1,6 +1,14 @@
 branch-v {
     width: 100%;
 
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 1rem;
+
+    .top-bar {
+        justify-self: end;
+    }
+
     section {
         display: flex;
         flex-direction: column;
@@ -11,16 +19,17 @@ branch-tile {
     .branch-tile {
         display: grid;
         grid-template-columns: 1fr auto;
-        grid-template-rows: auto auto;
-        gap: 0.2rem 0.5rem;
-        padding: 1rem 1rem;
+        grid-template-rows: auto auto auto;
+        gap: 0.4rem 0.5rem;
+        padding: 1rem;
         font-size: 0.9rem;
+        align-items: center;
     }
 
     .name {
         grid-column: 1 / 2;
         grid-row: 1 / 2;
-        font-weight: 500;
+        font-weight: 600;
     }
 
     .type {
