@@ -21,6 +21,7 @@ import { Branch } from "src-ui/src/bindings";
 import { TAG_TYPE } from "@carbon/web-components/es/components/tag/defs";
 import "@carbon/web-components/es/components/tag/index.js";
 import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/overflow-menu/index.js";
 
 const HTML = html`
   <div class="top-bar">
@@ -52,11 +53,22 @@ export class BranchView extends BaseViewElement {
     });
   }
 
+  @onEvent("cds-overflow-menu-item-clicked")
+  async onItemClick(evt: OnEvent) {
+    if (evt.target.className === "delete") {
+      const row = evt.target.closest("branch-tile")!;
+      repoFmc.delete_branch(row.getAttribute("branch-name") as string);
+    }
+  }
+
   async refreshContent(first_refresh?: boolean) {
     const branches = await repoFmc.list_branches();
 
     const content = frag(branches, (b: Branch) => {
-      let div = elem("branch-tile", { $: { branch: b } });
+      let div = elem("branch-tile", {
+        "branch-name": b.name,
+        $: { branch: b },
+      });
 
       return div;
     });
@@ -79,10 +91,36 @@ declare global {
 }
 
 const BRANCH_TILE_HTML = html`
-  <cds-tile class="branch-tile">
+  <cds-tile class="branch-tile" data-floating-menu-container>
     <span class="name"></span>
     <cds-tag class="type" size="md" title="Branch type"></cds-tag>
     <span class="id"></span>
+    <cds-overflow-menu size="md" index="1">
+      <svg
+        focusable="false"
+        preserveAspectRatio="xMidYMid meet"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="currentColor"
+        class="cds--overflow-menu__icon"
+        slot="icon"
+        width="16"
+        height="16"
+        viewBox="0 0 32 32"
+        aria-hidden="true"
+      >
+        <circle cx="16" cy="8" r="2"></circle>
+        <circle cx="16" cy="16" r="2"></circle>
+        <circle cx="16" cy="24" r="2"></circle>
+      </svg>
+      <span slot="tooltip-content"> Options </span>
+      <cds-overflow-menu-body flipped>
+        <cds-overflow-menu-item>Rename</cds-overflow-menu-item>
+        <cds-overflow-menu-item>Merge</cds-overflow-menu-item>
+        <cds-overflow-menu-item divider danger class="delete"
+          >Delete</cds-overflow-menu-item
+        >
+      </cds-overflow-menu-body>
+    </cds-overflow-menu>
   </cds-tile>
 `;
 

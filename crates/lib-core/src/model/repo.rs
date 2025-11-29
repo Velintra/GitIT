@@ -28,6 +28,15 @@ impl RepoBmc {
 		Ok(id.to_string())
 	}
 
+	pub fn delete_branch(rm: &RepoManager, ctx: &Ctx, name: String) -> Result<String> {
+		let repo_guard = rm.get_repo()?;
+		let repo = repo_guard.get()?;
+		let id = repo.delete_branch(&name)?;
+		fire_event(&ctx, "Model", "branch", "delete", id);
+
+		Ok(id.to_string())
+	}
+
 	pub fn list_branches(rm: &RepoManager) -> Result<Vec<Branch>> {
 		let repo_guard = rm.get_repo()?;
 		let repo = repo_guard.get()?;

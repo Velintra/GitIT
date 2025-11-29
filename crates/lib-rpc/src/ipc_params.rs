@@ -12,6 +12,11 @@ pub struct ParamsForOpen {
 }
 
 #[derive(Deserialize, RpcParams)]
+pub struct ParamsStringed {
+	pub data: String,
+}
+
+#[derive(Deserialize, RpcParams)]
 pub struct ParamsIded {
 	pub id: i64,
 }

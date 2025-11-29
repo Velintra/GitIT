@@ -1,26 +1,34 @@
 use crate::Result;
 use lib_core::{BranchForCreate, Ctx, RepoBmc, RepoManager};
 use lib_git::Branch;
-use lib_rpc::{DataIpcResult, ParamsForOpen};
+use lib_rpc::{DataIpcResult, ParamsForOpen, ParamsStringed};
 use rpc_router::{router_builder, RouterBuilder};
 
 pub fn router_builder() -> RouterBuilder {
-	router_builder!(open_repo, list_branches, create_branch)
+	router_builder!(open_repo, list_branches, create_branch, delete_branch)
 }
 
-pub async fn open_repo(rm: RepoManager, ctx: Ctx, params: ParamsForOpen) -> Result<DataIpcResult<String>> {
-	let ParamsForOpen { path } = params;
+pub async fn open_repo(rm: RepoManager, ctx: Ctx, params: ParamsStringed) -> Result<DataIpcResult<String>> {
+	let ParamsStringed { data } = params;
 
-	let repo = RepoBmc::open_repo(&rm, &ctx, path)?;
+	let repo = RepoBmc::open_repo(&rm, &ctx, data)?;
 	let root = repo.name();
 	rm.set_repo(repo)?;
 	Ok(root.into())
 }
 
-pub async fn create_branch(rm: RepoManager, ctx: Ctx, params: BranchForCreate) -> Result<DataIpcResult<String>> {
-	let BranchForCreate { name } = params;
+pub async fn create_branch(rm: RepoManager, ctx: Ctx, params: ParamsStringed) -> Result<DataIpcResult<String>> {
+	let ParamsStringed { data } = params;
 
-	let id = RepoBmc::create_branch(&rm, &ctx, name)?;
+	let id = RepoBmc::create_branch(&rm, &ctx, data)?;
+
+	Ok(id.into())
+}
+
+pub async fn delete_branch(rm: RepoManager, ctx: Ctx, params: ParamsStringed) -> Result<DataIpcResult<String>> {
+	let ParamsStringed { data } = params;
+
+	let id = RepoBmc::delete_branch(&rm, &ctx, data)?;
 
 	Ok(id.into())
 }

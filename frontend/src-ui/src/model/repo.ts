@@ -27,14 +27,21 @@ class RepoFmc extends BaseFmc {
   }
 
   async create_branch(name: string): Promise<string> {
-    const req = makeRpcRequest(`create_branch`, { name });
+    const req = makeRpcRequest(`create_branch`, { data: name });
+    return ipc_invoke("rpc_handler", "rpcReq", req).then(
+      (r: RpcSuccess<string>) => r.result.data,
+    );
+  }
+
+  async delete_branch(name: string): Promise<string> {
+    const req = makeRpcRequest(`delete_branch`, { data: name });
     return ipc_invoke("rpc_handler", "rpcReq", req).then(
       (r: RpcSuccess<string>) => r.result.data,
     );
   }
 
   async open(path: string): Promise<string> {
-    const req = makeRpcRequest(`open_${this.cmd_suffix}`, { path });
+    const req = makeRpcRequest(`open_${this.cmd_suffix}`, { data: path });
     return ipc_invoke("rpc_handler", "rpcReq", req).then(
       (r: RpcSuccess<string>) => r.result.data,
     );
